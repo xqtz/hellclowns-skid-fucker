@@ -50,6 +50,7 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "xqtzLoader"
 screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.IgnoreGuiInset = true
 screenGui.Parent = playerGui
 
 -- Main background
