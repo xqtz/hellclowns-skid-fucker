@@ -1,12 +1,18 @@
 --[[
-    xqtz Script Loader
-    Arms of Conquest Admin Menu
+    ██╗  ██╗ ██████╗ ████████╗███████╗
+    ╚██╗██╔╝██╔═══██╗╚══██╔══╝╚══███╔╝
+     ╚███╔╝ ██║   ██║   ██║     ███╔╝ 
+     ██╔██╗ ██║▄▄ ██║   ██║    ███╔╝  
+    ██╔╝ ██╗╚██████╔╝   ██║   ███████╗
+    ╚═╝  ╚═╝ ╚══▀▀═╝    ╚═╝   ╚══════╝
+    
+    Arms of Conquest Admin Menu Loader
+    github.com/xqtz
 ]]
 
 -- Services
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -16,6 +22,29 @@ if playerGui:FindFirstChild("xqtzLoader") then
     playerGui:FindFirstChild("xqtzLoader"):Destroy()
 end
 
+-- Colors
+local colors = {
+    bg = Color3.fromRGB(13, 17, 23),
+    terminal = Color3.fromRGB(22, 27, 34),
+    green = Color3.fromRGB(88, 166, 92),
+    brightGreen = Color3.fromRGB(126, 231, 135),
+    cyan = Color3.fromRGB(121, 192, 255),
+    yellow = Color3.fromRGB(210, 168, 75),
+    red = Color3.fromRGB(248, 81, 73),
+    purple = Color3.fromRGB(188, 140, 255),
+    gray = Color3.fromRGB(139, 148, 158),
+    white = Color3.fromRGB(201, 209, 217),
+}
+
+-- ASCII Art Logo
+local asciiLogo = [[
+ ██╗  ██╗ ██████╗ ████████╗███████╗
+ ╚██╗██╔╝██╔═══██╗╚══██╔══╝╚══███╔╝
+  ╚███╔╝ ██║   ██║   ██║     ███╔╝ 
+  ██╔██╗ ██║▄▄ ██║   ██║    ███╔╝  
+ ██╔╝ ██╗╚██████╔╝   ██║   ███████╗
+ ╚═╝  ╚═╝ ╚══▀▀═╝    ╚═╝   ╚══════╝]]
+
 -- Create main ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "xqtzLoader"
@@ -23,371 +52,372 @@ screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = playerGui
 
--- Main background frame
+-- Main background
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(1, 0, 1, 0)
-mainFrame.Position = UDim2.new(0, 0, 0, 0)
-mainFrame.BackgroundColor3 = Color3.fromRGB(8, 12, 18)
+mainFrame.BackgroundColor3 = colors.bg
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
 
--- Gradient overlay
-local gradient = Instance.new("UIGradient")
-gradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(8, 12, 18)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(15, 25, 35)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 12, 18))
-})
-gradient.Rotation = 45
-gradient.Parent = mainFrame
+-- CRT scanlines overlay
+local scanlines = Instance.new("Frame")
+scanlines.Name = "Scanlines"
+scanlines.Size = UDim2.new(1, 0, 1, 0)
+scanlines.BackgroundTransparency = 0.95
+scanlines.BackgroundColor3 = Color3.new(0, 0, 0)
+scanlines.BorderSizePixel = 0
+scanlines.ZIndex = 10
+scanlines.Parent = mainFrame
 
--- Container for centered content
-local container = Instance.new("Frame")
-container.Name = "Container"
-container.Size = UDim2.new(0, 500, 0, 400)
-container.Position = UDim2.new(0.5, -250, 0.5, -200)
-container.BackgroundTransparency = 1
-container.Parent = mainFrame
+-- Terminal window
+local terminal = Instance.new("Frame")
+terminal.Name = "Terminal"
+terminal.Size = UDim2.new(0, 700, 0, 500)
+terminal.Position = UDim2.new(0.5, -350, 0.5, -250)
+terminal.BackgroundColor3 = colors.terminal
+terminal.BorderSizePixel = 0
+terminal.Parent = mainFrame
 
--- xqtz Logo
-local logo = Instance.new("TextLabel")
-logo.Name = "Logo"
-logo.Size = UDim2.new(1, 0, 0, 120)
-logo.Position = UDim2.new(0, 0, 0, 20)
-logo.BackgroundTransparency = 1
-logo.Text = "xqtz"
-logo.Font = Enum.Font.GothamBlack
-logo.TextSize = 90
-logo.TextColor3 = Color3.fromRGB(0, 255, 255)
-logo.TextTransparency = 1
-logo.Parent = container
+local terminalCorner = Instance.new("UICorner")
+terminalCorner.CornerRadius = UDim.new(0, 10)
+terminalCorner.Parent = terminal
 
--- Logo glow effect (shadow)
-local logoGlow = Instance.new("TextLabel")
-logoGlow.Name = "LogoGlow"
-logoGlow.Size = UDim2.new(1, 0, 0, 120)
-logoGlow.Position = UDim2.new(0, 2, 0, 22)
-logoGlow.BackgroundTransparency = 1
-logoGlow.Text = "xqtz"
-logoGlow.Font = Enum.Font.GothamBlack
-logoGlow.TextSize = 90
-logoGlow.TextColor3 = Color3.fromRGB(0, 200, 200)
-logoGlow.TextTransparency = 1
-logoGlow.ZIndex = 0
-logoGlow.Parent = container
+local terminalStroke = Instance.new("UIStroke")
+terminalStroke.Color = colors.gray
+terminalStroke.Thickness = 1
+terminalStroke.Transparency = 0.7
+terminalStroke.Parent = terminal
 
--- Subtitle
-local subtitle = Instance.new("TextLabel")
-subtitle.Name = "Subtitle"
-subtitle.Size = UDim2.new(1, 0, 0, 30)
-subtitle.Position = UDim2.new(0, 0, 0, 140)
-subtitle.BackgroundTransparency = 1
-subtitle.Text = "SCRIPT LOADER"
-subtitle.Font = Enum.Font.Gotham
-subtitle.TextSize = 16
-subtitle.TextColor3 = Color3.fromRGB(100, 150, 170)
-subtitle.TextTransparency = 1
-logo.Parent = container
-subtitle.Parent = container
+-- Terminal header bar
+local header = Instance.new("Frame")
+header.Name = "Header"
+header.Size = UDim2.new(1, 0, 0, 35)
+header.BackgroundColor3 = Color3.fromRGB(30, 35, 42)
+header.BorderSizePixel = 0
+header.Parent = terminal
 
--- Decorative line
-local line = Instance.new("Frame")
-line.Name = "Line"
-line.Size = UDim2.new(0, 0, 0, 2)
-line.Position = UDim2.new(0.5, 0, 0, 180)
-line.AnchorPoint = Vector2.new(0.5, 0)
-line.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
-line.BorderSizePixel = 0
-line.BackgroundTransparency = 1
-line.Parent = container
+local headerCorner = Instance.new("UICorner")
+headerCorner.CornerRadius = UDim.new(0, 10)
+headerCorner.Parent = header
 
-local lineGradient = Instance.new("UIGradient")
-lineGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(8, 12, 18)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 12, 18))
-})
-lineGradient.Parent = line
+-- Fix corner - only round top
+local headerFix = Instance.new("Frame")
+headerFix.Size = UDim2.new(1, 0, 0, 15)
+headerFix.Position = UDim2.new(0, 0, 1, -15)
+headerFix.BackgroundColor3 = Color3.fromRGB(30, 35, 42)
+headerFix.BorderSizePixel = 0
+headerFix.Parent = header
 
--- Script box
-local scriptBox = Instance.new("Frame")
-scriptBox.Name = "ScriptBox"
-scriptBox.Size = UDim2.new(1, -40, 0, 80)
-scriptBox.Position = UDim2.new(0, 20, 0, 200)
-scriptBox.BackgroundColor3 = Color3.fromRGB(15, 20, 28)
-scriptBox.BorderSizePixel = 0
-scriptBox.BackgroundTransparency = 1
-scriptBox.Parent = container
-
-local scriptBoxCorner = Instance.new("UICorner")
-scriptBoxCorner.CornerRadius = UDim.new(0, 8)
-scriptBoxCorner.Parent = scriptBox
-
-local scriptBoxStroke = Instance.new("UIStroke")
-scriptBoxStroke.Color = Color3.fromRGB(0, 255, 255)
-scriptBoxStroke.Thickness = 1
-scriptBoxStroke.Transparency = 1
-scriptBoxStroke.Parent = scriptBox
-
--- Terminal dots
-local dotsContainer = Instance.new("Frame")
-dotsContainer.Size = UDim2.new(1, -16, 0, 20)
-dotsContainer.Position = UDim2.new(0, 8, 0, 8)
-dotsContainer.BackgroundTransparency = 1
-dotsContainer.Parent = scriptBox
-
-local colors = {Color3.fromRGB(255, 95, 87), Color3.fromRGB(255, 189, 46), Color3.fromRGB(39, 201, 63)}
+-- Window buttons
+local buttonColors = {colors.red, colors.yellow, colors.green}
 for i = 1, 3 do
-    local dot = Instance.new("Frame")
-    dot.Size = UDim2.new(0, 10, 0, 10)
-    dot.Position = UDim2.new(0, (i-1) * 16, 0, 5)
-    dot.BackgroundColor3 = colors[i]
-    dot.BorderSizePixel = 0
-    dot.Parent = dotsContainer
+    local btn = Instance.new("Frame")
+    btn.Size = UDim2.new(0, 12, 0, 12)
+    btn.Position = UDim2.new(0, 12 + (i-1) * 20, 0.5, -6)
+    btn.BackgroundColor3 = buttonColors[i]
+    btn.BorderSizePixel = 0
+    btn.Parent = header
     
-    local dotCorner = Instance.new("UICorner")
-    dotCorner.CornerRadius = UDim.new(1, 0)
-    dotCorner.Parent = dot
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(1, 0)
+    btnCorner.Parent = btn
 end
 
--- Script text
-local scriptText = Instance.new("TextLabel")
-scriptText.Name = "ScriptText"
-scriptText.Size = UDim2.new(1, -20, 0, 40)
-scriptText.Position = UDim2.new(0, 10, 0, 32)
-scriptText.BackgroundTransparency = 1
-scriptText.Text = ">> "
-scriptText.Font = Enum.Font.Code
-scriptText.TextSize = 12
-scriptText.TextColor3 = Color3.fromRGB(0, 255, 255)
-scriptText.TextXAlignment = Enum.TextXAlignment.Left
-scriptText.TextWrapped = true
-scriptText.Parent = scriptBox
+-- Terminal title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 1, 0)
+title.BackgroundTransparency = 1
+title.Text = "xqtz@arch ~ bash"
+title.Font = Enum.Font.Code
+title.TextSize = 13
+title.TextColor3 = colors.gray
+title.Parent = header
 
--- Loading bar background
-local loadingBarBg = Instance.new("Frame")
-loadingBarBg.Name = "LoadingBarBg"
-loadingBarBg.Size = UDim2.new(1, -40, 0, 8)
-loadingBarBg.Position = UDim2.new(0, 20, 0, 300)
-loadingBarBg.BackgroundColor3 = Color3.fromRGB(30, 40, 50)
-loadingBarBg.BorderSizePixel = 0
-loadingBarBg.BackgroundTransparency = 1
-loadingBarBg.Parent = container
+-- Terminal content area
+local content = Instance.new("ScrollingFrame")
+content.Name = "Content"
+content.Size = UDim2.new(1, -20, 1, -50)
+content.Position = UDim2.new(0, 10, 0, 40)
+content.BackgroundTransparency = 1
+content.BorderSizePixel = 0
+content.ScrollBarThickness = 4
+content.ScrollBarImageColor3 = colors.green
+content.CanvasSize = UDim2.new(0, 0, 0, 0)
+content.AutomaticCanvasSize = Enum.AutomaticSize.Y
+content.Parent = terminal
 
-local loadingBarBgCorner = Instance.new("UICorner")
-loadingBarBgCorner.CornerRadius = UDim.new(1, 0)
-loadingBarBgCorner.Parent = loadingBarBg
+local contentLayout = Instance.new("UIListLayout")
+contentLayout.SortOrder = Enum.SortOrder.LayoutOrder
+contentLayout.Padding = UDim.new(0, 2)
+contentLayout.Parent = content
 
--- Loading bar fill
-local loadingBar = Instance.new("Frame")
-loadingBar.Name = "LoadingBar"
-loadingBar.Size = UDim2.new(0, 0, 1, 0)
-loadingBar.Position = UDim2.new(0, 0, 0, 0)
-loadingBar.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
-loadingBar.BorderSizePixel = 0
-loadingBar.Parent = loadingBarBg
-
-local loadingBarCorner = Instance.new("UICorner")
-loadingBarCorner.CornerRadius = UDim.new(1, 0)
-loadingBarCorner.Parent = loadingBar
-
-local loadingBarGradient = Instance.new("UIGradient")
-loadingBarGradient.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 200, 200)),
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 255, 255))
-})
-loadingBarGradient.Parent = loadingBar
-
--- Status text
-local statusText = Instance.new("TextLabel")
-statusText.Name = "StatusText"
-statusText.Size = UDim2.new(1, -40, 0, 25)
-statusText.Position = UDim2.new(0, 20, 0, 315)
-statusText.BackgroundTransparency = 1
-statusText.Text = "Initializing..."
-statusText.Font = Enum.Font.Gotham
-statusText.TextSize = 14
-statusText.TextColor3 = Color3.fromRGB(100, 150, 170)
-statusText.TextTransparency = 1
-statusText.Parent = container
-
--- Percentage text
-local percentText = Instance.new("TextLabel")
-percentText.Name = "PercentText"
-percentText.Size = UDim2.new(0, 50, 0, 25)
-percentText.Position = UDim2.new(1, -70, 0, 315)
-percentText.BackgroundTransparency = 1
-percentText.Text = "0%"
-percentText.Font = Enum.Font.GothamBold
-percentText.TextSize = 14
-percentText.TextColor3 = Color3.fromRGB(0, 255, 255)
-percentText.TextTransparency = 1
-percentText.Parent = container
-
--- Footer
-local footer = Instance.new("TextLabel")
-footer.Name = "Footer"
-footer.Size = UDim2.new(1, 0, 0, 20)
-footer.Position = UDim2.new(0, 0, 0, 360)
-footer.BackgroundTransparency = 1
-footer.Text = "Made with 💜 by xqtz"
-footer.Font = Enum.Font.Gotham
-footer.TextSize = 12
-footer.TextColor3 = Color3.fromRGB(150, 100, 200)
-footer.TextTransparency = 1
-footer.Parent = container
-
--- Animation helper
-local function tween(obj, props, duration, style, direction)
-    style = style or Enum.EasingStyle.Quart
-    direction = direction or Enum.EasingDirection.Out
-    local tweenInfo = TweenInfo.new(duration, style, direction)
-    local t = TweenService:Create(obj, tweenInfo, props)
-    t:Play()
-    return t
-end
-
--- Glitch effect for logo
-local glitchChars = {"!", "@", "#", "$", "%", "^", "&", "*", "?", "~"}
-local originalText = "xqtz"
-
-local function glitchEffect()
-    spawn(function()
-        while logo and logo.Parent do
-            wait(math.random(2, 5))
-            local glitched = ""
-            for i = 1, #originalText do
-                if math.random() > 0.7 then
-                    glitched = glitched .. glitchChars[math.random(1, #glitchChars)]
-                else
-                    glitched = glitched .. originalText:sub(i, i)
-                end
+-- Helper to add terminal line
+local lineOrder = 0
+local function addLine(text, color, prefix, instant)
+    color = color or colors.white
+    prefix = prefix or ""
+    
+    local line = Instance.new("TextLabel")
+    line.Name = "Line" .. lineOrder
+    line.Size = UDim2.new(1, 0, 0, 0)
+    line.AutomaticSize = Enum.AutomaticSize.Y
+    line.BackgroundTransparency = 1
+    line.Text = prefix .. text
+    line.Font = Enum.Font.Code
+    line.TextSize = 14
+    line.TextColor3 = color
+    line.TextXAlignment = Enum.TextXAlignment.Left
+    line.TextWrapped = true
+    line.RichText = true
+    line.LayoutOrder = lineOrder
+    line.TextTransparency = instant and 0 or 1
+    line.Parent = content
+    
+    lineOrder = lineOrder + 1
+    
+    if not instant then
+        -- Typewriter effect
+        local fullText = prefix .. text
+        line.Text = ""
+        line.TextTransparency = 0
+        
+        spawn(function()
+            for i = 1, #fullText do
+                line.Text = fullText:sub(1, i)
+                wait(0.008)
             end
-            logo.Text = glitched
-            logoGlow.Text = glitched
-            
-            -- RGB split effect
-            logo.Position = UDim2.new(0, math.random(-3, 3), 0, 20 + math.random(-2, 2))
-            wait(0.05)
-            logo.Text = originalText
-            logoGlow.Text = originalText
-            logo.Position = UDim2.new(0, 0, 0, 20)
-        end
-    end)
+        end)
+    end
+    
+    -- Auto scroll
+    content.CanvasPosition = Vector2.new(0, content.AbsoluteCanvasSize.Y)
+    
+    return line
 end
 
--- Typing effect
-local function typeText(label, text, speed)
-    speed = speed or 0.02
-    label.Text = ">> "
-    for i = 1, #text do
-        label.Text = ">> " .. text:sub(1, i)
-        wait(speed)
+-- Add ASCII logo lines
+local function addAsciiLogo()
+    for logoLine in asciiLogo:gmatch("[^\n]+") do
+        local line = Instance.new("TextLabel")
+        line.Size = UDim2.new(1, 0, 0, 16)
+        line.BackgroundTransparency = 1
+        line.Text = logoLine
+        line.Font = Enum.Font.Code
+        line.TextSize = 14
+        line.TextColor3 = colors.brightGreen
+        line.TextXAlignment = Enum.TextXAlignment.Left
+        line.LayoutOrder = lineOrder
+        line.TextTransparency = 1
+        line.Parent = content
+        lineOrder = lineOrder + 1
+        
+        TweenService:Create(line, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
+        wait(0.05)
     end
 end
 
--- Status messages
-local statuses = {
-    {0, "Initializing..."},
-    {15, "Connecting to server..."},
-    {30, "Fetching script..."},
-    {50, "Decrypting payload..."},
-    {70, "Injecting modules..."},
-    {85, "Bypassing security..."},
-    {95, "Finalizing..."},
-    {100, "Loading complete!"}
+-- Progress bar in terminal
+local function createProgressBar(label)
+    local container = Instance.new("Frame")
+    container.Size = UDim2.new(1, 0, 0, 20)
+    container.BackgroundTransparency = 1
+    container.LayoutOrder = lineOrder
+    container.Parent = content
+    lineOrder = lineOrder + 1
+    
+    local labelText = Instance.new("TextLabel")
+    labelText.Size = UDim2.new(0, 200, 1, 0)
+    labelText.BackgroundTransparency = 1
+    labelText.Text = label
+    labelText.Font = Enum.Font.Code
+    labelText.TextSize = 14
+    labelText.TextColor3 = colors.cyan
+    labelText.TextXAlignment = Enum.TextXAlignment.Left
+    labelText.Parent = container
+    
+    local barBg = Instance.new("TextLabel")
+    barBg.Size = UDim2.new(0, 300, 0, 14)
+    barBg.Position = UDim2.new(0, 210, 0.5, -7)
+    barBg.BackgroundTransparency = 1
+    barBg.Text = "[                              ]"
+    barBg.Font = Enum.Font.Code
+    barBg.TextSize = 14
+    barBg.TextColor3 = colors.gray
+    barBg.TextXAlignment = Enum.TextXAlignment.Left
+    barBg.Parent = container
+    
+    local percent = Instance.new("TextLabel")
+    percent.Size = UDim2.new(0, 50, 1, 0)
+    percent.Position = UDim2.new(0, 520, 0, 0)
+    percent.BackgroundTransparency = 1
+    percent.Text = "0%"
+    percent.Font = Enum.Font.Code
+    percent.TextSize = 14
+    percent.TextColor3 = colors.yellow
+    percent.TextXAlignment = Enum.TextXAlignment.Left
+    percent.Parent = container
+    
+    return {
+        update = function(progress)
+            local filled = math.floor(progress * 30)
+            local bar = "[" .. string.rep("█", filled) .. string.rep("░", 30 - filled) .. "]"
+            barBg.Text = bar
+            barBg.TextColor3 = progress >= 1 and colors.brightGreen or colors.green
+            percent.Text = math.floor(progress * 100) .. "%"
+            percent.TextColor3 = progress >= 1 and colors.brightGreen or colors.yellow
+        end
+    }
+end
+
+-- Boot sequence
+local bootMessages = {
+    {text = "Linux 6.5.0-arch1-1 (tty1)", color = colors.white, delay = 0.1},
+    {text = "", delay = 0.05},
+    {text = "xqtz login: root", color = colors.white, delay = 0.2},
+    {text = "Password: ************", color = colors.white, delay = 0.3},
+    {text = "", delay = 0.1},
+    {text = "[  OK  ] Started Session 1 of user root.", color = colors.green, delay = 0.15},
+    {text = "", delay = 0.1},
 }
 
--- Main animation sequence
+local systemMessages = {
+    {text = "$ neofetch", color = colors.cyan, delay = 0.3},
+}
+
+local infoMessages = {
+    {text = "       OS: Arch Linux x86_64", color = colors.white},
+    {text = "   Kernel: 6.5.0-arch1-1", color = colors.white},
+    {text = "  Uptime: 0 mins", color = colors.white},
+    {text = " Packages: 1337 (pacman)", color = colors.white},
+    {text = "    Shell: bash 5.2.15", color = colors.white},
+    {text = "  Terminal: /dev/tty1", color = colors.white},
+    {text = "      CPU: xqtz Core @ 4.20GHz", color = colors.white},
+    {text = "   Memory: 420MB / 16384MB", color = colors.white},
+}
+
+local loadSequence = {
+    {text = "$ sudo ./xqtz-loader.sh", color = colors.cyan},
+    {text = "[sudo] password for root: ************", color = colors.white, delay = 0.4},
+    {text = "", delay = 0.1},
+    {text = "[*] Initializing xqtz Core...", color = colors.purple},
+    {text = "[*] Checking dependencies...", color = colors.gray},
+    {text = "    ├── curl: OK", color = colors.green},
+    {text = "    ├── wget: OK", color = colors.green},
+    {text = "    ├── lua5.4: OK", color = colors.green},
+    {text = "    └── injector: OK", color = colors.green},
+    {text = "", delay = 0.05},
+    {text = "[*] Connecting to github.com/xqtz...", color = colors.gray},
+    {text = "[+] Connection established (ping: 13ms)", color = colors.green},
+    {text = "", delay = 0.05},
+    {text = "[*] Fetching payload from remote...", color = colors.gray},
+    {text = "    GET /xqtz/xqtz-Core/main/Arms%20of%20Conquest", color = colors.gray},
+    {text = "[+] HTTP 200 OK (Size: 42.0 KB)", color = colors.green},
+    {text = "", delay = 0.05},
+}
+
+local injectionSequence = {
+    {text = "[*] Decrypting payload...", color = colors.yellow, progress = true, label = "Decrypting"},
+    {text = "[+] Payload decrypted successfully", color = colors.green},
+    {text = "", delay = 0.05},
+    {text = "[*] Bypassing anti-cheat...", color = colors.red, progress = true, label = "Bypassing"},
+    {text = "[+] Anti-cheat bypassed", color = colors.green},
+    {text = "", delay = 0.05},
+    {text = "[*] Injecting modules...", color = colors.purple, progress = true, label = "Injecting"},
+    {text = "[+] Modules injected (23 functions loaded)", color = colors.green},
+    {text = "", delay = 0.05},
+}
+
+local finalSequence = {
+    {text = "═══════════════════════════════════════════════════════", color = colors.brightGreen},
+    {text = "[SUCCESS] Arms of Conquest Admin Menu loaded!", color = colors.brightGreen},
+    {text = "═══════════════════════════════════════════════════════", color = colors.brightGreen},
+    {text = "", delay = 0.1},
+    {text = "Press any key to continue...", color = colors.gray},
+}
+
+-- Main execution
 spawn(function()
     wait(0.5)
     
-    -- Fade in logo with glow
-    tween(logoGlow, {TextTransparency = 0.5}, 0.8)
-    tween(logo, {TextTransparency = 0}, 0.8)
-    glitchEffect()
-    
-    wait(0.6)
-    
-    -- Fade in subtitle
-    tween(subtitle, {TextTransparency = 0}, 0.5)
-    
-    wait(0.4)
-    
-    -- Animate line
-    tween(line, {BackgroundTransparency = 0, Size = UDim2.new(0.6, 0, 0, 2)}, 0.6)
-    
-    wait(0.4)
-    
-    -- Fade in script box
-    tween(scriptBox, {BackgroundTransparency = 0}, 0.4)
-    tween(scriptBoxStroke, {Transparency = 0.5}, 0.4)
-    
-    wait(0.3)
-    
-    -- Type the script
-    local scriptUrl = "loadstring(game:HttpGet([[https://raw.githubusercontent.com/xqtz/xqtz-Core/...]]))()"
-    typeText(scriptText, scriptUrl, 0.015)
-    
-    wait(0.3)
-    
-    -- Fade in loading elements
-    tween(loadingBarBg, {BackgroundTransparency = 0}, 0.3)
-    tween(statusText, {TextTransparency = 0}, 0.3)
-    tween(percentText, {TextTransparency = 0}, 0.3)
-    tween(footer, {TextTransparency = 0.3}, 0.3)
-    
-    wait(0.2)
-    
-    -- Loading animation
-    local duration = 3
-    local startTime = tick()
-    local statusIndex = 1
-    
-    while tick() - startTime < duration do
-        local progress = (tick() - startTime) / duration
-        local percent = math.floor(progress * 100)
-        
-        percentText.Text = percent .. "%"
-        tween(loadingBar, {Size = UDim2.new(progress, 0, 1, 0)}, 0.1, Enum.EasingStyle.Linear)
-        
-        -- Update status
-        for i, status in ipairs(statuses) do
-            if percent >= status[1] and i > statusIndex then
-                statusIndex = i
-                statusText.Text = status[2]
-            end
+    -- Boot messages
+    for _, msg in ipairs(bootMessages) do
+        if msg.text ~= "" then
+            addLine(msg.text, msg.color, "", true)
+        else
+            addLine(" ", colors.white, "", true)
         end
-        
-        wait(0.03)
+        wait(msg.delay or 0.1)
     end
     
-    -- Complete
-    percentText.Text = "100%"
-    statusText.Text = "Loading complete!"
-    statusText.TextColor3 = Color3.fromRGB(0, 255, 150)
-    tween(loadingBar, {Size = UDim2.new(1, 0, 1, 0)}, 0.2)
+    -- System commands
+    for _, msg in ipairs(systemMessages) do
+        addLine(msg.text, msg.color)
+        wait(msg.delay or 0.3)
+    end
     
     wait(0.5)
     
-    -- Success flash
-    tween(loadingBar, {BackgroundColor3 = Color3.fromRGB(0, 255, 150)}, 0.2)
+    -- ASCII Logo
+    addAsciiLogo()
+    wait(0.3)
     
-    wait(1)
+    -- System info
+    for _, msg in ipairs(infoMessages) do
+        addLine(msg.text, msg.color, "", true)
+        wait(0.05)
+    end
     
-    -- Fade out
-    tween(mainFrame, {BackgroundTransparency = 1}, 0.5)
-    for _, child in pairs(container:GetDescendants()) do
-        if child:IsA("TextLabel") or child:IsA("Frame") then
-            pcall(function()
-                tween(child, {BackgroundTransparency = 1, TextTransparency = 1}, 0.5)
-            end)
+    addLine("", colors.white, "", true)
+    wait(0.5)
+    
+    -- Load sequence
+    for _, msg in ipairs(loadSequence) do
+        addLine(msg.text, msg.color)
+        wait(msg.delay or 0.15)
+    end
+    
+    -- Injection with progress bars
+    for _, msg in ipairs(injectionSequence) do
+        if msg.progress then
+            addLine(msg.text, msg.color)
+            wait(0.2)
+            local bar = createProgressBar(msg.label .. ":")
+            for i = 0, 100, math.random(3, 8) do
+                bar.update(math.min(i, 100) / 100)
+                wait(0.03)
+            end
+            bar.update(1)
+            wait(0.1)
+        else
+            addLine(msg.text, msg.color)
+            wait(msg.delay or 0.1)
         end
     end
     
-    wait(0.6)
+    wait(0.3)
+    
+    -- Final sequence
+    for _, msg in ipairs(finalSequence) do
+        addLine(msg.text, msg.color)
+        wait(msg.delay or 0.15)
+    end
+    
+    wait(2)
+    
+    -- Fade out
+    TweenService:Create(mainFrame, TweenInfo.new(0.8), {BackgroundTransparency = 1}):Play()
+    TweenService:Create(terminal, TweenInfo.new(0.8), {BackgroundTransparency = 1}):Play()
+    for _, child in pairs(terminal:GetDescendants()) do
+        pcall(function()
+            TweenService:Create(child, TweenInfo.new(0.8), {
+                BackgroundTransparency = 1,
+                TextTransparency = 1
+            }):Play()
+        end)
+    end
+    
+    wait(1)
     
     -- Cleanup and execute
     screenGui:Destroy()
